@@ -1,6 +1,28 @@
-Project: eBPF Explorer
+eBPF Explorer - Project Notes
+================================
 
-Day 1
+1. Fork Events
+- TRACEPOINT_PROBE(sched, sched_process_fork) ব্যবহার করে process creation track করা হয়েছে।
+- প্রতিটা নতুন process তৈরি হওয়ার সাথে সাথে parent PID এবং child PID দেখা যায়।
 
-- Project structure created
-- Git repository initialized
+2. Exec Events
+- TRACEPOINT_PROBE(sched, sched_process_exec) ব্যবহার করে কোনো program execute হওয়ার সময় ধরা যায়।
+- bpf_get_current_pid_tgid() ব্যবহার করে current PID পাওয়া হয়েছে।
+
+3. Open Events
+- syscalls:sys_enter_openat tracepoint দিয়ে file open syscall trace করা হয়েছে।
+- bpf_probe_read_user_str() দিয়ে user-space থেকে filename পড়া হয়েছে।
+
+4. Scheduler Events
+- sched_switch tracepoint দিয়ে CPU scheduler context switch track করা হয়েছে (prev/next process)।
+
+5. Dashboard
+- উপরের তিনটা probe (fork, exec, open) একসাথে combine করে একটা single program (dashboard.py) তৈরি করা হয়েছে।
+- trace_pipe থেকে output read করে সব event একসাথে দেখা যায়।
+
+Challenges Faced
+- প্রথমে trace_print() এর বদলে trace_pipe ব্যবহার করতে হয়েছে কিছু পরিস্থিতিতে।
+- Sudo permission প্রয়োজন কারণ eBPF program কার্নেলে লোড হয়।
+
+Conclusion
+- eBPF একটা শক্তিশালী tool যা দিয়ে kernel-level event সরাসরি monitor করা যায়, traditional tracing tool (strace) এর তুলনায় অনেক efficient।
