@@ -1,0 +1,6 @@
+Project: eBPF Explorer
+
+Day 1
+
+- Project structure created
+- Git repository initialized
