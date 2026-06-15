@@ -28,6 +28,6 @@ b = BPF(text=program)
 
 print("=== eBPF Explorer Dashboard ===")
 print("Monitoring: Fork | Exec | Open events")
-print("Press Ctrl+C to stop\\n")
+print("Press Ctrl+C to stop\n")
 
 b.trace_print()
